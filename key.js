@@ -1,29 +1,30 @@
-// FILE: key.js
-// Daftar API Key yang valid beserta masa berlakunya dan device tracking
+
+// manage apikey & expired
+
 const validApiKeys = {
-    'CRYPTO1234567890': { 
+    'CDIA-ZEAG-TLUK': { 
         expires: new Date('2025-12-31').getTime(),
         name: 'Premium User',
         level: 'premium',
         deviceId: null,
         lastUsed: null
     },
-    'LEN9876543210': { 
-        expires: new Date('2025-08-15').getTime(),
+    'XVCS-PAGY-LETS': { 
+        expires: new Date('2025-08-02').getTime(),
         name: 'Trial User',
         level: 'trial',
         deviceId: null,
         lastUsed: null
     },
-    'FLAME2025XYZ': { 
-        expires: new Date('2025-08-30').getTime(),
+    'FLAME.XYZ': { 
+        expires: new Date('2026-08-30').getTime(),
         name: 'Developer',
         level: 'admin',
         deviceId: null,
         lastUsed: null
     },
-    'TEST123456789': {
-        expires: new Date('2025-12-31').getTime(),
+    'TEST-KEYS-EXPR': {
+        expires: new Date('2025-07-31').getTime(),
         name: 'Tester',
         level: 'tester',
         deviceId: null,
@@ -31,13 +32,11 @@ const validApiKeys = {
     }
 };
 
-// Generate unique device ID
 function generateDeviceId() {
     return 'device_' + Math.random().toString(36).substr(2, 9) + 
            '_' + new Date().getTime().toString(36);
 }
 
-// Fungsi untuk validasi API Key dengan device checking
 function validateApiKey(apiKey) {
     const keyData = validApiKeys[apiKey];
     const now = new Date().getTime();
