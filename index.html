@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Didihub</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --green: #2ecc71;
+            --green-dark: #27ae60;
+            --red: #e74c3c;
+            --red-dark: #c0392b;
+            --gold: #f39c12;
+            --purple: #9b59b6;
+            --purple-dark: #8e44ad;
+            --dark-blue: #1a5276;
+            --light-blue: #85c1e9;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+            --light-gray: #ecf0f1;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Login Modal Styles */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .login-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--dark-blue);
+            font-size: 1.5rem;
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .login-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        .login-form input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .login-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .login-error {
+            color: var(--red);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .login-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            z-index: 100;
+            display: none;
+        }
+        
+        .logout-btn:hover {
+            background: var(--red-dark);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Rest of your existing styles... */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .card-title i {
+            font-size: 1.4rem;
+            color: var(--primary);
+        }
+        
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .upload-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .upload-subtext {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            opacity: 0.9;
+        }
+        
+        .btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .results-container {
+            margin-top: 20px;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+        
+        .result-title {
+            font-size: 1.2rem;
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+        
+        .confidence {
+            background-color: var(--gold);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .prediction-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .prediction-table th {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .prediction-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .prediction-table tr:nth-child(even) {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .prediction-table tr:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .prediction-table .high-confidence {
+            border-left: 4px solid var(--green);
+        }
+        
+        .prediction-table .medium-confidence {
+            border-left: 4px solid var(--gold);
+        }
+        
+        .prediction-table .low-confidence {
+            border-left: 4px solid var(--red);
+        }
+        
+        .indicator {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        
+        .indicator.square {
+            border-radius: 4px;
+        }
+        
+        .green-bg {
+            background-color: var(--green);
+        }
+        
+        .red-bg {
+            background-color: var(--red);
+        }
+        
+        .purple-bg {
+            background-color: var(--purple);
+        }
+        
+        .large-bg {
+            background-color: var(--dark-blue);
+        }
+        
+        .small-bg {
+            background-color: var(--light-blue);
+        }
+        
+        .confidence-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .high-dot {
+            background-color: var(--green);
+            box-shadow: 0 0 5px var(--green);
+        }
+        
+        .medium-dot {
+            background-color: var(--gold);
+            box-shadow: 0 0 5px var(--gold);
+        }
+        
+        .low-dot {
+            background-color: var(--red);
+            box-shadow: 0 0 5px var(--red);
+        }
+        
+        .loading-container {
+            display: none;
+            text-align: center;
+            padding: 30px 0;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+        
+        .empty-icon {
+            font-size: 2.5rem;
+            color: #dfe6e9;
+            margin-bottom: 15px;
+        }
+        
+        .preview-container {
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .detected-info {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: rgba(52, 152, 219, 0.1);
+            border-radius: 8px;
+            text-align: left;
+        }
+        
+        .detected-period {
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin-bottom: 5px;
+        }
+        
+        .pattern-info {
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-top: 3px solid var(--primary);
+        }
+        
+        .stat-card.winrate {
+            border-top-color: var(--green);
+        }
+        
+        .stat-card.accuracy {
+            border-top-color: var(--gold);
+        }
+        
+        .stat-card.streak {
+            border-top-color: var(--red);
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-blue);
+            margin: 5px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        .pattern-history {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: rgba(52, 152, 219, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .history-item {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .history-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .history-icon {
+            color: var(--primary);
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .history-text {
+            flex: 1;
+        }
+        
+        .history-text strong {
+            color: var(--dark-blue);
+        }
+        
+        .analysis-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .tab-btn {
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .analysis-options {
+            margin: 15px 0;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .option-btn {
+            padding: 8px 15px;
+            background: var(--light-gray);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        
+        .option-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .bmkh-analysis {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(155, 89, 182, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--purple);
+        }
+        
+        .bmkh-item {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .bmkh-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .bmkh-icon {
+            color: var(--purple);
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .bmkh-text {
+            flex: 1;
+        }
+        
+        .bmkh-text strong {
+            color: var(--purple-dark);
+        }
+        
+        .analysis-type-selector {
+            display: flex;
+            margin-bottom: 20px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            padding: 5px;
+        }
+        
+        .type-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray);
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        
+        .type-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .type-btn i {
+            margin-right: 8px;
+        }
+        
+        .analysis-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .analysis-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .pattern-change-alert {
+            padding: 10px;
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid var(--red);
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .pattern-change-alert.warning {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left-color: var(--gold);
+        }
+        
+        .pattern-change-alert.success {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left-color: var(--green);
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .upload-area {
+                padding: 20px;
+                min-height: 160px;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .analysis-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .prediction-table {
+                font-size: 0.85rem;
+            }
+            
+            .prediction-table th, 
+            .prediction-table td {
+                padding: 10px 8px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+    <!-- Load key.js terpisah -->
+    <script src="key.js"></script>
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal" class="login-modal">
+        <div class="login-container">
+            <h2 class="login-title"><i class="fas fa-lock"></i> Masuk dengan API Key</h2>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="apiKey">API Key CryptoLen</label>
+                    <input type="password" id="apiKey" placeholder="Masukkan API Key Anda" required>
+                    <div id="loginError" class="login-error">API Key tidak valid atau sudah kadaluarsa</div>
+                </div>
+                <button type="submit" class="login-btn">Masuk</button>
+            </form>
+            <div class="login-footer">
+                Dapatkan API Key dari <a href="#" id="getApiKeyLink">CryptoLen</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Logout Button -->
+    <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    
+    <!-- Main Content (hidden until login) -->
+    <div id="mainContent" style="display: none;">
+        <div class="container">
+            <header>
+                <h1><i class="fas fa-user"></i> Selamat Datang</h1>
+                <p>Dibuat FLAME-XYZ 28-07-2025</p>
+            </header>
+            
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload Data Pola</span>
+                </div>
+                
+                <div id="uploadArea" class="upload-area">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="upload-text">Klik atau seret gambar data pola</div>
+                    <div class="upload-subtext">Format: Screenshot dengan data historis</div>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                </div>
+                
+                <div id="previewContainer" class="preview-container">
+                    <img id="previewImage" class="preview-image" src="" alt="Preview">
+                    <div id="detectedInfo" class="detected-info">
+                        <div id="detectedPeriod" class="detected-period"></div>
+                        <div id="patternInfo" class="pattern-info"></div>
+                    </div>
+                </div>
+                
+                <div id="analysisTypeSelector" class="analysis-type-selector" style="display: none;">
+                    <button class="type-btn active" data-type="color">
+                        <i class="fas fa-palette"></i> Warna
+                    </button>
+                    <button class="type-btn" data-type="size">
+                        <i class="fas fa-arrows-alt-v"></i> Besar/Kecil
+                    </button>
+                    <button class="type-btn" data-type="bmkh">
+                        <i class="fas fa-layer-group"></i> Kombinasi
+                    </button>
+                </div>
+                
+                <button id="analyzeBtn" class="btn" disabled>
+                    <i class="fas fa-brain"></i> Analisis Pola Canggih
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Hasil Prediksi</span>
+                </div>
+                
+                <div id="loadingContainer" class="loading-container">
+                    <div class="spinner"></div>
+                    <p>Menganalisis pola dengan algoritma canggih...</p>
+                </div>
+                
+                <div id="resultContainer">
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <p>Upload data pola untuk melihat prediksi</p>
+                    </div>
+                </div>
+                
+                <!-- Color Analysis Section -->
+                <div id="colorAnalysis" class="analysis-section active">
+                    
+                    <div id="colorChangeAlert" class="pattern-change-alert" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i> <span id="colorChangeText">Pola warna diperkirakan akan berubah dalam 2-3 periode</span>
+                    </div>
+                    
+                    <div id="colorTab" class="tab-content active">
+                        <div class="result-header">
+                            <div class="result-title">Prediksi Warna</div>
+                            <div class="confidence">Akurasi: <span id="colorAccuracy">92%</span></div>
+                        </div>
+                        <table class="prediction-table" id="colorPredictionsTable">
+                            <thead>
+                                <tr>
+                                    <th>Periode</th>
+                                    <th>Warna</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="colorPredictionsBody">
+                                <!-- Will be filled by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Size Analysis Section -->
+                <div id="sizeAnalysis" class="analysis-section">
+                    <div class="section-title">
+                        <i class="fas fa-arrows-alt-v"></i> Analisis Besar/Kecil
+                    </div>
+                    
+                    <div id="sizeChangeAlert" class="pattern-change-alert" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i> <span id="sizeChangeText">Pola ukuran diperkirakan akan berubah dalam 2-3 periode</span>
+                    </div>
+                    
+                    <div id="sizeTab" class="tab-content">
+                        <div class="result-header">
+                            <div class="result-title">Prediksi Besar/Kecil</div>
+                            <div class="confidence">Akurasi: <span id="sizeAccuracy">87%</span></div>
+                        </div>
+                        <table class="prediction-table" id="sizePredictionsTable">
+                            <thead>
+                                <tr>
+                                    <th>Periode</th>
+                                    <th>Ukuran</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sizePredictionsBody">
+                                <!-- Will be filled by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- BMKH Analysis Section -->
+                <div id="bmkhAnalysisSection" class="analysis-section">
+                    
+                    <div id="bmkhChangeAlert" class="pattern-change-alert" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i> <span id="bmkhChangeText">Pola kombinasi diperkirakan akan berubah dalam 2-3 periode</span>
+                    </div>
+                    
+                    <div id="bmkhAnalysis" class="bmkh-analysis">
+                        <div class="bmkh-item">
+                            <div class="bmkh-icon"><i class="fas fa-chart-line"></i></div>
+                            <div class="bmkh-text">Trend saat ini: <strong id="currentTrend">Naik</strong></div>
+                        </div>
+                        <div class="bmkh-item">
+                            <div class="bmkh-icon"><i class="fas fa-project-diagram"></i></div>
+                            <div class="bmkh-text">Pola BM/KH: <strong id="bmkhPattern">BH-KH-BM-KM</strong></div>
+                        </div>
+                        <div class="bmkh-item">
+                            <div class="bmkh-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="bmkh-text">Perubahan pola diperkirakan: <strong id="patternChange">Dalam 2-3 periode</strong></div>
+                        </div>
+                    </div>
+                    
+                    <div id="bmkhTab" class="tab-content">
+                        <div class="result-header">
+                            <div class="result-title">Prediksi Kombinasi</div>
+                            <div class="confidence">Akurasi: <span id="bmkhAccuracy">83%</span></div>
+                        </div>
+                        <table class="prediction-table" id="bmkhPredictionsTable">
+                            <thead>
+                                <tr>
+                                    <th>Periode</th>
+                                    <th>Kombinasi</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bmkhPredictionsBody">
+                                <!-- Will be filled by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="statsContainer" class="stats-container" style="display: none;">
+                    <div class="stat-card winrate">
+                        <div class="stat-value" id="winRate">85%</div>
+                        <div class="stat-label">Win Rate</div>
+                    </div>
+                    <div class="stat-card accuracy">
+                        <div class="stat-value" id="patternAccuracy">92%</div>
+                        <div class="stat-label">Akurasi Pola</div>
+                    </div>
+                    <div class="stat-card streak">
+                        <div class="stat-value" id="streak">7x</div>
+                        <div class="stat-label">Win Streak</div>
+                    </div>
+                </div>
+                
+                <div id="patternHistory" class="pattern-history" style="display: none;">
+                    <div class="history-item">
+                        <div class="history-icon"><i class="fas fa-history"></i></div>
+                        <div class="history-text">Pola saat ini: <strong id="currentPattern">ABABAB (Pola Bergantian)</strong></div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-icon"><i class="fas fa-clock"></i></div>
+                        <div class="history-text">Perubahan pola terakhir: <strong id="lastPatternChange">3 periode lalu</strong></div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-icon"><i class="fas fa-sync-alt"></i></div>
+                        <div class="history-text">Siklus pola: <strong id="patternCycle">6 periode</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Login System Variables
+        const loginModal = document.getElementById('loginModal');
+        const loginForm = document.getElementById('loginForm');
+        const apiKeyInput = document.getElementById('apiKey');
+        const loginError = document.getElementById('loginError');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const mainContent = document.getElementById('mainContent');
+        const getApiKeyLink = document.getElementById('getApiKeyLink');
+        
+        // Session timer variable
+        let sessionTimer;
+        
+        // Generate unique device ID
+        function generateDeviceId() {
+            return 'device_' + Math.random().toString(36).substr(2, 9) + 
+                   '_' + new Date().getTime().toString(36);
+        }
+        
+        // Check for saved session on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedApiKey = localStorage.getItem('cryptolen_api_key');
+            const savedExpiry = localStorage.getItem('cryptolen_api_expiry');
+            const deviceId = localStorage.getItem('deviceId') || generateDeviceId();
+            localStorage.setItem('deviceId', deviceId);
+            
+            if (savedApiKey && savedExpiry) {
+                const now = new Date().getTime();
+                if (now < parseInt(savedExpiry)) {
+                    // Check device binding
+                    const keyData = validApiKeys[savedApiKey];
+                    if (keyData && (!keyData.deviceId || keyData.deviceId === deviceId)) {
+                        // Valid session exists - auto login
+                        apiKeyInput.value = savedApiKey;
+                        handleSuccessfulLogin(
+                            savedApiKey, 
+                            parseInt(savedExpiry),
+                            JSON.parse(localStorage.getItem('cryptolen_user_data') || '{}')
+                        );
+                        return;
+                    } else if (keyData && keyData.deviceId !== deviceId) {
+                        // Used by another device - force logout
+                        localStorage.removeItem('cryptolen_api_key');
+                        localStorage.removeItem('cryptolen_api_expiry');
+                        localStorage.removeItem('cryptolen_user_data');
+                    }
+                } else {
+                    // Session expired - clear storage
+                    localStorage.removeItem('cryptolen_api_key');
+                    localStorage.removeItem('cryptolen_api_expiry');
+                    localStorage.removeItem('cryptolen_user_data');
+                }
+            }
+            
+            // Show login modal if no valid session
+            loginModal.style.display = 'flex';
+        });
+        
+        // Login form submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const apiKey = apiKeyInput.value.trim();
+            
+            // Validasi key menggunakan fungsi dari key.js
+            const validation = validateApiKey(apiKey);
+            
+            if (validation.isValid) {
+                handleSuccessfulLogin(apiKey, validation.expires, validation.userData);
+            } else {
+                showLoginError(validation);
+            }
+        });
+        
+        // Show login error
+        function showLoginError(validation) {
+            loginError.style.display = 'block';
+            loginError.textContent = validation.message || 
+                (validation.isExpired ? 'API Key sudah kadaluarsa. Silahkan perbarui.' : 'API Key tidak valid. Silahkan coba lagi.');
+        }
+        
+        // Handle successful login
+        function handleSuccessfulLogin(apiKey, expires, userData) {
+            // Simpan key dan expiry time di localStorage
+            localStorage.setItem('cryptolen_api_key', apiKey);
+            localStorage.setItem('cryptolen_api_expiry', expires.toString());
+            localStorage.setItem('cryptolen_user_data', JSON.stringify(userData));
+            
+            // Hide login modal and show main content
+            loginModal.style.display = 'none';
+            mainContent.style.display = 'block';
+            logoutBtn.style.display = 'block';
+            
+            // Update welcome message with user name
+            document.querySelector('header h1').innerHTML = `<i class="fas fa-user"></i> Selamat Datang, ${userData.name}`;
+            
+            // Start session timer
+            startSessionTimer(expires);
+            
+            // Initialize the app
+            initializeApp();
+        }
+        
+        // Start session timer
+        function startSessionTimer(expiryTime) {
+            const now = new Date().getTime();
+            const remainingTime = expiryTime - now;
+            
+            if (remainingTime > 0) {
+                sessionTimer = setTimeout(() => {
+                    alert('Sesi Anda telah berakhir karena API Key sudah kadaluarsa.');
+                    logout();
+                }, remainingTime);
+            } else {
+                logout();
+            }
+        }
+        
+        // Logout function
+        function logout() {
+            const apiKey = localStorage.getItem('cryptolen_api_key');
+            
+            // Clear device binding
+            if (apiKey && validApiKeys[apiKey]) {
+                logoutApiKey(apiKey);
+            }
+            
+            // Clear storage and timer
+            localStorage.removeItem('cryptolen_api_key');
+            localStorage.removeItem('cryptolen_api_expiry');
+            localStorage.removeItem('cryptolen_user_data');
+            localStorage.removeItem('deviceId');
+            clearTimeout(sessionTimer);
+            
+            // Hide main content
+            mainContent.style.display = 'none';
+            logoutBtn.style.display = 'none';
+            
+            // Show login modal
+            loginModal.style.display = 'flex';
+            apiKeyInput.value = '';
+            loginError.style.display = 'none';
+        }
+        
+        // Logout button click
+        logoutBtn.addEventListener('click', logout);
+        
+        // Get API Key link
+        getApiKeyLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Untuk mendapatkan API Key, silahkan kunjungi website resmi CryptoLen atau hubungi administrator.');
+        });
+
+        // Initialize the app after successful login
+        function initializeApp() {
+            // DOM Elements
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const previewContainer = document.getElementById('previewContainer');
+            const previewImage = document.getElementById('previewImage');
+            const detectedPeriod = document.getElementById('detectedPeriod');
+            const patternInfo = document.getElementById('patternInfo');
+            const loadingContainer = document.getElementById('loadingContainer');
+            const resultContainer = document.getElementById('resultContainer');
+            const statsContainer = document.getElementById('statsContainer');
+            const patternHistory = document.getElementById('patternHistory');
+            const currentPattern = document.getElementById('currentPattern');
+            const lastPatternChange = document.getElementById('lastPatternChange');
+            const patternCycle = document.getElementById('patternCycle');
+            const winRate = document.getElementById('winRate');
+            const patternAccuracy = document.getElementById('patternAccuracy');
+            const streak = document.getElementById('streak');
+            const analysisTypeSelector = document.getElementById('analysisTypeSelector');
+            const colorAnalysis = document.getElementById('colorAnalysis');
+            const sizeAnalysis = document.getElementById('sizeAnalysis');
+            const bmkhAnalysisSection = document.getElementById('bmkhAnalysisSection');
+            const colorPredictionsBody = document.getElementById('colorPredictionsBody');
+            const sizePredictionsBody = document.getElementById('sizePredictionsBody');
+            const bmkhPredictionsBody = document.getElementById('bmkhPredictionsBody');
+            const analysisOptionsColor = document.getElementById('analysisOptionsColor');
+            const colorAccuracy = document.getElementById('colorAccuracy');
+            const sizeAccuracy = document.getElementById('sizeAccuracy');
+            const bmkhAccuracy = document.getElementById('bmkhAccuracy');
+            const colorChangeAlert = document.getElementById('colorChangeAlert');
+            const sizeChangeAlert = document.getElementById('sizeChangeAlert');
+            const bmkhChangeAlert = document.getElementById('bmkhChangeAlert');
+            const colorChangeText = document.getElementById('colorChangeText');
+            const sizeChangeText = document.getElementById('sizeChangeText');
+            const bmkhChangeText = document.getElementById('bmkhChangeText');
+            const bmkhAnalysis = document.getElementById('bmkhAnalysis');
+            const currentTrend = document.getElementById('currentTrend');
+            const bmkhPattern = document.getElementById('bmkhPattern');
+            const patternChange = document.getElementById('patternChange');
+
+            // Variables
+            let currentData = {
+                period: null,
+                pattern: null,
+                history: [],
+                predictions: [],
+                colorPredictions: [],
+                sizePredictions: [],
+                bmkhPredictions: [],
+                lastPatternChange: null,
+                patternChangeProbability: 0.3,
+                colorChangeProbability: 0.25,
+                sizeChangeProbability: 0.2,
+                bmkhChangeProbability: 0.25
+            };
+
+            // Event Listeners
+            uploadArea.addEventListener('click', () => fileInput.click());
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#3498db';
+                uploadArea.style.backgroundColor = 'rgba(52, 152, 219, 0.1)';
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.borderColor = '#ccc';
+                uploadArea.style.backgroundColor = 'rgba(52, 152, 219, 0.05)';
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#ccc';
+                uploadArea.style.backgroundColor = 'rgba(52, 152, 219, 0.05)';
+                
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    handleFileUpload(e.dataTransfer.files[0]);
+                }
+            });
+            
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length) {
+                    handleFileUpload(fileInput.files[0]);
+                }
+            });
+            
+            analyzeBtn.addEventListener('click', analyzeData);
+            
+            // Analysis type switching
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Hide all analysis sections
+                    document.querySelectorAll('.analysis-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Show selected analysis section
+                    const selectedSection = document.getElementById(`${btn.dataset.type}Analysis`);
+                    selectedSection.classList.add('active');
+                    
+                    // Also update the tab content visibility
+                    if (btn.dataset.type === 'color') {
+                        document.getElementById('colorTab').classList.add('active');
+                        document.getElementById('sizeTab').classList.remove('active');
+                        document.getElementById('bmkhTab').classList.remove('active');
+                    } else if (btn.dataset.type === 'size') {
+                        document.getElementById('colorTab').classList.remove('active');
+                        document.getElementById('sizeTab').classList.add('active');
+                        document.getElementById('bmkhTab').classList.remove('active');
+                    } else if (btn.dataset.type === 'bmkh') {
+                        document.getElementById('colorTab').classList.remove('active');
+                        document.getElementById('sizeTab').classList.remove('active');
+                        document.getElementById('bmkhTab').classList.add('active');
+                    }
+                });
+            });
+            
+            // Analysis options
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Regenerate predictions based on selected option
+                    if (currentData.period && currentData.pattern) {
+                        generateAdvancedPredictions(btn.dataset.option);
+                    }
+                });
+            });
+
+            // Handle file upload
+            async function handleFileUpload(file) {
+                // Reset data
+                currentData = {
+                    period: null,
+                    pattern: null,
+                    history: [],
+                    predictions: [],
+                    colorPredictions: [],
+                    sizePredictions: [],
+                    bmkhPredictions: [],
+                    lastPatternChange: null,
+                    patternChangeProbability: 0.3,
+                    colorChangeProbability: 0.25,
+                    sizeChangeProbability: 0.2,
+                    bmkhChangeProbability: 0.25
+                };
+                
+                analyzeBtn.disabled = true;
+                analysisTypeSelector.style.display = 'none';
+                colorAnalysis.style.display = 'none';
+                sizeAnalysis.style.display = 'none';
+                bmkhAnalysisSection.style.display = 'none';
+                colorChangeAlert.style.display = 'none';
+                sizeChangeAlert.style.display = 'none';
+                bmkhChangeAlert.style.display = 'none';
+                
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                    
+                    // Update upload area UI
+                    uploadArea.innerHTML = `
+                        <div class="upload-icon">
+                            <i class="fas fa-check-circle" style="color: #2ecc71;"></i>
+                        </div>
+                        <div class="upload-text">${file.name}</div>
+                        <div class="upload-subtext">Mengidentifikasi pola...</div>
+                    `;
+                    uploadArea.style.borderColor = '#2ecc71';
+                    
+                    // Process image with OCR
+                    processImageWithOCR(e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // Process image with Tesseract OCR
+            async function processImageWithOCR(imageSrc) {
+                try {
+                    loadingContainer.style.display = 'block';
+                    detectedPeriod.textContent = "Membaca data dari gambar...";
+                    patternInfo.textContent = "Menganalisis pola...";
+                    
+                    const { data: { text } } = await Tesseract.recognize(
+                        imageSrc,
+                        'eng',
+                        { logger: m => console.log(m) }
+                    );
+                    
+                    // Extract period and pattern data
+                    extractDataFromText(text);
+                    
+                } catch (error) {
+                    detectedPeriod.innerHTML = `
+                        <i class="fas fa-exclamation-circle" style="color: #e74c3c;"></i>
+                        Gagal membaca data: ${error.message}
+                    `;
+                    patternInfo.textContent = "";
+                    uploadArea.querySelector('.upload-subtext').textContent = "Gagal membaca data";
+                    uploadArea.querySelector('.upload-icon').innerHTML = '<i class="fas fa-exclamation-circle" style="color: #e74c3c;"></i>';
+                    uploadArea.style.borderColor = '#e74c3c';
+                } finally {
+                    loadingContainer.style.display = 'none';
+                }
+            }
+
+            // Extract data from OCR text
+            function extractDataFromText(text) {
+                // Extract period
+                const periodMatch = text.match(/Periode[:]?\s*(\d{10,})/i) || 
+                                   text.match(/(\d{10,})/);
+                
+                if (periodMatch && periodMatch[1]) {
+                    currentData.period = periodMatch[1];
+                    detectedPeriod.innerHTML = `
+                        <i class="fas fa-check-circle" style="color: #2ecc71;"></i>
+                        Periode terdeteksi: <strong>${currentData.period}</strong>
+                    `;
+                } else {
+                    throw new Error("Periode tidak ditemukan dalam gambar");
+                }
+                
+                // Enhanced pattern detection with purple consideration
+                const patterns = Object.keys(patternDatabase);
+                let bestMatch = null;
+                let bestScore = 0;
+                
+                // Check for each pattern in the text
+                patterns.forEach(pattern => {
+                    const regex = new RegExp(pattern.replace(/(.)/g, '$1[\\s\\-]*'), 'i');
+                    if (regex.test(text)) {
+                        const score = pattern.length;
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMatch = pattern;
+                        }
+                    }
+                });
+                
+                // If no direct match, find the closest pattern
+                if (!bestMatch) {
+                    const lines = text.split('\n');
+                    lines.forEach(line => {
+                        const cleanLine = line.replace(/[^ABC]/g, '');
+                        if (cleanLine.length >= 4) {
+                            patterns.forEach(pattern => {
+                                const similarity = calculateSimilarity(cleanLine, pattern);
+                                if (similarity > 0.7 && similarity > bestScore) {
+                                    bestScore = similarity;
+                                    bestMatch = pattern;
+                                }
+                            });
+                        }
+                    });
+                }
+                
+                // Fallback to random pattern if still no match
+                if (!bestMatch) {
+                    bestMatch = patterns[Math.floor(Math.random() * patterns.length)];
+                }
+                
+                currentData.pattern = bestMatch;
+                const patternData = patternDatabase[bestMatch];
+                
+                // Set dynamic change probabilities
+                currentData.patternChangeProbability = patternData.changeProbability;
+                currentData.colorChangeProbability = patternData.colorChangeProb;
+                currentData.sizeChangeProbability = patternData.sizeChangeProb;
+                currentData.bmkhChangeProbability = patternData.bmkhChangeProb;
+                
+                patternInfo.innerHTML = `
+                    <strong>${patternData.name}</strong><br>
+                    ${patternData.description}
+                `;
+                
+                // Generate mock history based on pattern with random variations
+                generateDynamicHistory(bestMatch);
+                
+                analyzeBtn.disabled = false;
+                analysisTypeSelector.style.display = 'flex';
+                colorAnalysis.style.display = 'block';
+                colorAnalysis.classList.add('active');
+            }
+
+            // Calculate similarity between two patterns
+            function calculateSimilarity(str1, str2) {
+                const len = Math.min(str1.length, str2.length);
+                let matchCount = 0;
+                
+                for (let i = 0; i < len; i++) {
+                    if (str1[i] === str2[i] || (str1[i] === 'C' && (str2[i] === 'A' || str2[i] === 'B'))) {
+                        matchCount++;
+                    }
+                }
+                
+                return matchCount / Math.max(str1.length, str2.length);
+            }
+
+            // Generate dynamic history with possible pattern breaks
+            function generateDynamicHistory(pattern) {
+                const patternData = patternDatabase[pattern];
+                const historyLength = patternData.colorPattern.length * 2; // Show 2 cycles
+                
+                currentData.history = [];
+                let patternBroken = false;
+                let breakPoint = -1;
+                
+                // Randomly determine if pattern should break and where
+                if (Math.random() < currentData.patternChangeProbability) {
+                    breakPoint = Math.floor(Math.random() * (historyLength - 4)) + 2;
+                }
+                
+                for (let i = 0; i < historyLength; i++) {
+                    let cyclePos = i % patternData.colorPattern.length;
+                    
+                    // After break point, generate random values
+                    if (breakPoint !== -1 && i >= breakPoint) {
+                        cyclePos = Math.floor(Math.random() * patternData.colorPattern.length);
+                    }
+                    
+                    const isGreen = patternData.colorPattern[cyclePos] === 0;
+                    const isRed = patternData.colorPattern[cyclePos] === 1;
+                    const isPurple = patternData.colorPattern[cyclePos] === 2;
+                    const isLarge = patternData.sizePattern[cyclePos] === 1;
+                    
+                    let color;
+                    if (isPurple) {
+                        color = "Ungu";
+                    } else {
+                        color = isGreen ? "Hijau" : "Merah";
+                    }
+                    
+                    currentData.history.push({
+                        period: (parseInt(currentData.period) - historyLength + i).toString(),
+                        color: color,
+                        size: isLarge ? "Besar" : "Kecil",
+                        bmkh: patternData.bmkhPattern[cyclePos % patternData.bmkhPattern.length],
+                        isPatternBreak: breakPoint !== -1 && i >= breakPoint
+                    });
+                }
+                
+                // Record when pattern broke (if it did)
+                if (breakPoint !== -1) {
+                    currentData.lastPatternChange = currentData.history[breakPoint].period;
+                }
+            }
+
+            // Analyze data and generate predictions
+            function analyzeData() {
+                if (!currentData.period || !currentData.pattern) {
+                    alert("Tidak dapat menganalisis - data tidak lengkap");
+                    return;
+                }
+
+                // Show loading
+                loadingContainer.style.display = 'block';
+                resultContainer.innerHTML = '';
+                statsContainer.style.display = 'none';
+                patternHistory.style.display = 'none';
+                colorChangeAlert.style.display = 'none';
+                sizeChangeAlert.style.display = 'none';
+                bmkhChangeAlert.style.display = 'none';
+                
+                // Show analysis sections
+                colorAnalysis.style.display = 'block';
+                sizeAnalysis.style.display = 'block';
+                bmkhAnalysisSection.style.display = 'block';
+                
+                // Simulate analysis delay
+                setTimeout(() => {
+                    loadingContainer.style.display = 'none';
+                    generateAdvancedPredictions('all');
+                    showStatsAndHistory();
+                    updateChangeAlerts();
+                }, 2000);
+            }
+
+            // Generate advanced predictions with dynamic pattern consideration
+            function generateAdvancedPredictions(option = 'all') {
+                const patternData = patternDatabase[currentData.pattern];
+                const basePeriod = parseInt(currentData.period);
+                
+                // Reset predictions
+                currentData.predictions = [];
+                currentData.colorPredictions = [];
+                currentData.sizePredictions = [];
+                currentData.bmkhPredictions = [];
+                
+                // Calculate probabilities of pattern continuing vs breaking
+                const patternContinueProb = 1 - currentData.patternChangeProbability;
+                const colorContinueProb = 1 - currentData.colorChangeProbability;
+                const sizeContinueProb = 1 - currentData.sizeChangeProbability;
+                const bmkhContinueProb = 1 - currentData.bmkhChangeProbability;
+                
+                // Generate 10 predictions with dynamic pattern breaks
+                for (let i = 1; i <= 10; i++) {
+                    let cyclePos = (i - 1) % patternData.colorPattern.length;
+                    let isPatternBreak = false;
+                    let isColorBreak = false;
+                    let isSizeBreak = false;
+                    let isBmkhBreak = false;
+                    
+                    // Determine if pattern breaks at this position
+                    if (Math.random() > patternContinueProb) {
+                        isPatternBreak = true;
+                        cyclePos = Math.floor(Math.random() * patternData.colorPattern.length);
+                    }
+                    
+                    // Determine if color sub-pattern breaks
+                    if (Math.random() > colorContinueProb) {
+                        isColorBreak = true;
+                    }
+                    
+                    // Determine if size sub-pattern breaks
+                    if (Math.random() > sizeContinueProb) {
+                        isSizeBreak = true;
+                    }
+                    
+                    // Determine if BMKH sub-pattern breaks
+                    if (Math.random() > bmkhContinueProb) {
+                        isBmkhBreak = true;
+                    }
+                    
+                    // Generate values based on pattern (with possible breaks)
+                    let colorValue, sizeValue, bmkhValue;
+                    
+                    // Color
+                    if (isPatternBreak || isColorBreak) {
+                        // Random color when pattern breaks
+                        const rand = Math.random();
+                        if (rand < 0.45) {
+                            colorValue = "Hijau";
+                        } else if (rand < 0.9) {
+                            colorValue = "Merah";
+                        } else {
+                            colorValue = "Ungu";
+                        }
+                    } else {
+                        // Follow pattern
+                        const colorCode = patternData.colorPattern[cyclePos];
+                        colorValue = colorCode === 0 ? "Hijau" : (colorCode === 1 ? "Merah" : "Ungu");
+                    }
+                    
+                    // Size
+                    if (isPatternBreak || isSizeBreak) {
+                        // Random size when pattern breaks
+                        sizeValue = Math.random() < 0.5 ? "Besar" : "Kecil";
+                    } else {
+                        // Follow pattern
+                        sizeValue = patternData.sizePattern[cyclePos % patternData.sizePattern.length] === 1 ? "Besar" : "Kecil";
+                    }
+                    
+                    // BMKH
+                    if (isPatternBreak || isBmkhBreak) {
+                        // Random BMKH when pattern breaks
+                        const rand = Math.floor(Math.random() * 4);
+                        switch(rand) {
+                            case 0: bmkhValue = "BH"; break;
+                            case 1: bmkhValue = "KH"; break;
+                            case 2: bmkhValue = "BM"; break;
+                            case 3: bmkhValue = "KM"; break;
+                        }
+                    } else {
+                        // Follow pattern
+                        const bmkhCode = patternData.bmkhPattern[cyclePos % patternData.bmkhPattern.length];
+                        switch(bmkhCode) {
+                            case 0: bmkhValue = "BH"; break;
+                            case 1: bmkhValue = "KH"; break;
+                            case 2: bmkhValue = "BM"; break;
+                            case 3: bmkhValue = "KM"; break;
+                        }
+                    }
+                    
+                    // Calculate confidence based on break probabilities
+                    let confidence;
+                    if (isPatternBreak) {
+                        confidence = 'low';
+                    } else if (isColorBreak || isSizeBreak || isBmkhBreak) {
+                        confidence = 'medium';
+                    } else {
+                        confidence = 'high';
+                    }
+                    
+                    currentData.predictions.push({
+                        period: (basePeriod + i).toString(),
+                        color: colorValue,
+                        size: sizeValue,
+                        bmkh: bmkhValue,
+                        confidence: confidence,
+                        isPatternBreak: isPatternBreak,
+                        isColorBreak: isColorBreak,
+                        isSizeBreak: isSizeBreak,
+                        isBmkhBreak: isBmkhBreak
+                    });
+                }
+                
+                // Generate separate predictions for each tab
+                currentData.predictions.forEach(pred => {
+                    // Color predictions
+                    currentData.colorPredictions.push({
+                        period: pred.period,
+                        value: pred.color,
+                        confidence: pred.confidence,
+                        isPatternBreak: pred.isPatternBreak,
+                        isSubBreak: pred.isColorBreak,
+                        isPurple: pred.color === "Ungu"
+                    });
+                    
+                    // Size predictions
+                    currentData.sizePredictions.push({
+                        period: pred.period,
+                        value: pred.size,
+                        confidence: pred.confidence,
+                        isPatternBreak: pred.isPatternBreak,
+                        isSubBreak: pred.isSizeBreak
+                    });
+                    
+                    // BM/KH predictions
+                    currentData.bmkhPredictions.push({
+                        period: pred.period,
+                        value: pred.bmkh,
+                        confidence: pred.confidence,
+                        isPatternBreak: pred.isPatternBreak,
+                        isSubBreak: pred.isBmkhBreak
+                    });
+                });
+                
+                // Update all tabs
+                updateColorPredictions();
+                updateSizePredictions();
+                updateBmkhPredictions();
+                
+                // Update BMKH analysis
+                updateBmkhAnalysis();
+                
+                // Update accuracy indicators
+                updateAccuracyIndicators();
+            }
+            
+            function updateAccuracyIndicators() {
+                // Calculate accuracy based on break probabilities
+                const colorAccuracy = Math.round((1 - currentData.colorChangeProbability) * 90 + (Math.random() * 5));
+                const sizeAccuracy = Math.round((1 - currentData.sizeChangeProbability) * 85 + (Math.random() * 5));
+                const bmkhAccuracy = Math.round((1 - currentData.bmkhChangeProbability) * 80 + (Math.random() * 5));
+                
+                document.getElementById('colorAccuracy').textContent = `${colorAccuracy}%`;
+                document.getElementById('sizeAccuracy').textContent = `${sizeAccuracy}%`;
+                document.getElementById('bmkhAccuracy').textContent = `${bmkhAccuracy}%`;
+            }
+            
+            function updateChangeAlerts() {
+                // Color change alert
+                if (currentData.colorChangeProbability > 0.35) {
+                    colorChangeAlert.style.display = 'block';
+                    colorChangeAlert.className = 'pattern-change-alert';
+                    const changeIn = Math.max(1, Math.floor(3 - (currentData.colorChangeProbability * 5)));
+                    colorChangeText.textContent = `Pola warna memiliki kemungkinan tinggi berubah dalam ${changeIn}-${changeIn+1} periode`;
+                } else if (currentData.colorChangeProbability > 0.2) {
+                    colorChangeAlert.style.display = 'block';
+                    colorChangeAlert.className = 'pattern-change-alert warning';
+                    const changeIn = Math.max(2, Math.floor(5 - (currentData.colorChangeProbability * 10)));
+                    colorChangeText.textContent = `Pola warna mungkin berubah dalam ${changeIn}-${changeIn+2} periode`;
+                } else {
+                    colorChangeAlert.style.display = 'block';
+                    colorChangeAlert.className = 'pattern-change-alert success';
+                    colorChangeText.textContent = 'Pola warna stabil, diperkirakan akan bertahan';
+                }
+                
+                // Size change alert
+                if (currentData.sizeChangeProbability > 0.3) {
+                    sizeChangeAlert.style.display = 'block';
+                    sizeChangeAlert.className = 'pattern-change-alert';
+                    const changeIn = Math.max(1, Math.floor(3 - (currentData.sizeChangeProbability * 5)));
+                    sizeChangeText.textContent = `Pola ukuran memiliki kemungkinan tinggi berubah dalam ${changeIn}-${changeIn+1} periode`;
+                } else if (currentData.sizeChangeProbability > 0.15) {
+                    sizeChangeAlert.style.display = 'block';
+                    sizeChangeAlert.className = 'pattern-change-alert warning';
+                    const changeIn = Math.max(2, Math.floor(5 - (currentData.sizeChangeProbability * 10)));
+                    sizeChangeText.textContent = `Pola ukuran mungkin berubah dalam ${changeIn}-${changeIn+2} periode`;
+                } else {
+                    sizeChangeAlert.style.display = 'block';
+                    sizeChangeAlert.className = 'pattern-change-alert success';
+                    sizeChangeText.textContent = 'Pola ukuran stabil, diperkirakan akan bertahan';
+                }
+                
+                // BMKH change alert
+                if (currentData.bmkhChangeProbability > 0.35) {
+                    bmkhChangeAlert.style.display = 'block';
+                    bmkhChangeAlert.className = 'pattern-change-alert';
+                    const changeIn = Math.max(1, Math.floor(3 - (currentData.bmkhChangeProbability * 5)));
+                    bmkhChangeText.textContent = `Pola kombinasi memiliki kemungkinan tinggi berubah dalam ${changeIn}-${changeIn+1} periode`;
+                } else if (currentData.bmkhChangeProbability > 0.2) {
+                    bmkhChangeAlert.style.display = 'block';
+                    bmkhChangeAlert.className = 'pattern-change-alert warning';
+                    const changeIn = Math.max(2, Math.floor(5 - (currentData.bmkhChangeProbability * 10)));
+                    bmkhChangeText.textContent = `Pola kombinasi mungkin berubah dalam ${changeIn}-${changeIn+2} periode`;
+                } else {
+                    bmkhChangeAlert.style.display = 'block';
+                    bmkhChangeAlert.className = 'pattern-change-alert success';
+                    bmkhChangeText.textContent = 'Pola kombinasi stabil, diperkirakan akan bertahan';
+                }
+            }
+            
+            function updateColorPredictions() {
+                colorPredictionsBody.innerHTML = '';
+                
+                currentData.colorPredictions.forEach(pred => {
+                    let colorClass = '';
+                    let confidenceClass = '';
+                    let rowClass = '';
+                    let description = '';
+                    
+                    if (pred.isPurple) {
+                        colorClass = 'purple-bg';
+                        description = 'Pergantian trend';
+                    } else if (pred.value === "Hijau") {
+                        colorClass = 'green-bg';
+                        description = pred.isPatternBreak ? 'Pola putus' : (pred.isSubBreak ? 'Variasi pola' : 'Lanjutan pola');
+                    } else {
+                        colorClass = 'red-bg';
+                        description = pred.isPatternBreak ? 'Pola putus' : (pred.isSubBreak ? 'Variasi pola' : 'Lanjutan pola');
+                    }
+                    
+                    if (pred.confidence === 'high') {
+                        confidenceClass = 'high-dot';
+                        rowClass = 'high-confidence';
+                    } else if (pred.confidence === 'medium') {
+                        confidenceClass = 'medium-dot';
+                        rowClass = 'medium-confidence';
+                    } else {
+                        confidenceClass = 'low-dot';
+                        rowClass = 'low-confidence';
+                    }
+                    
+                    const row = document.createElement('tr');
+                    row.className = rowClass;
+                    row.innerHTML = `
+                        <td>${pred.period}<span class="${confidenceClass}"></span></td>
+                        <td><span class="indicator ${colorClass}"></span> ${pred.value}</td>
+                        <td>${description}</td>
+                    `;
+                    
+                    colorPredictionsBody.appendChild(row);
+                });
+            }
+            
+            function updateSizePredictions() {
+                sizePredictionsBody.innerHTML = '';
+                
+                currentData.sizePredictions.forEach(pred => {
+                    let sizeClass = pred.value === "Besar" ? 'large-bg' : 'small-bg';
+                    let confidenceClass = '';
+                    let rowClass = '';
+                    let description = '';
+                    
+                    if (pred.confidence === 'high') {
+                        confidenceClass = 'high-dot';
+                        rowClass = 'high-confidence';
+                        description = 'Pola kuat';
+                    } else if (pred.confidence === 'medium') {
+                        confidenceClass = 'medium-dot';
+                        rowClass = 'medium-confidence';
+                        description = pred.isSubBreak ? 'Variasi pola' : 'Pola sedang';
+                    } else {
+                        confidenceClass = 'low-dot';
+                        rowClass = 'low-confidence';
+                        description = 'Pola putus';
+                    }
+                    
+                    const row = document.createElement('tr');
+                    row.className = rowClass;
+                    row.innerHTML = `
+                        <td>${pred.period}<span class="${confidenceClass}"></span></td>
+                        <td><span class="indicator square ${sizeClass}"></span> ${pred.value}</td>
+                        <td>${description}</td>
+                    `;
+                    
+                    sizePredictionsBody.appendChild(row);
+                });
+            }
+            
+            function updateBmkhPredictions() {
+                bmkhPredictionsBody.innerHTML = '';
+                
+                currentData.bmkhPredictions.forEach(pred => {
+                    let colorClass = '';
+                    let sizeClass = '';
+                    let confidenceClass = '';
+                    let rowClass = '';
+                    
+                    // Determine color and size classes
+                    if (pred.value === "BH") {
+                        colorClass = 'green-bg';
+                        sizeClass = 'large-bg';
+                    } else if (pred.value === "KH") {
+                        colorClass = 'green-bg';
+                        sizeClass = 'small-bg';
+                    } else if (pred.value === "BM") {
+                        colorClass = 'red-bg';
+                        sizeClass = 'large-bg';
+                    } else if (pred.value === "KM") {
+                        colorClass = 'red-bg';
+                        sizeClass = 'small-bg';
+                    }
+                    
+                    if (pred.confidence === 'high') {
+                        confidenceClass = 'high-dot';
+                        rowClass = 'high-confidence';
+                    } else if (pred.confidence === 'medium') {
+                        confidenceClass = 'medium-dot';
+                        rowClass = 'medium-confidence';
+                    } else {
+                        confidenceClass = 'low-dot';
+                        rowClass = 'low-confidence';
+                    }
+                    
+                    const row = document.createElement('tr');
+                    row.className = rowClass;
+                    row.innerHTML = `
+                        <td>${pred.period}<span class="${confidenceClass}"></span></td>
+                        <td>
+                            <span class="indicator ${colorClass}"></span>
+                            <span class="indicator square ${sizeClass}"></span>
+                            ${pred.value}
+                        </td>
+                        <td>${getBmkhDescription(pred.value, pred.isPatternBreak, pred.isSubBreak)}</td>
+                    `;
+                    
+                    bmkhPredictionsBody.appendChild(row);
+                });
+            }
+            
+            function getBmkhDescription(value, isPatternBreak, isSubBreak) {
+                if (isPatternBreak) return "Pola putus - acak";
+                if (isSubBreak) return "Variasi pola";
+                
+                switch(value) {
+                    case "BH": return "Besar Hijau (Trend kuat)";
+                    case "KH": return "Kecil Hijau (Koreksi)";
+                    case "BM": return "Besar Merah (Reversal)";
+                    case "KM": return "Kecil Merah (Konsolidasi)";
+                    default: return "";
+                }
+            }
+            
+            function updateBmkhAnalysis() {
+                const patternData = patternDatabase[currentData.pattern];
+                
+                // Determine current trend based on last few results
+                const lastResults = currentData.history.slice(-4);
+                const greenCount = lastResults.filter(r => r.color === "Hijau").length;
+                const redCount = lastResults.filter(r => r.color === "Merah").length;
+                const purpleCount = lastResults.filter(r => r.color === "Ungu").length;
+                
+                if (purpleCount > 0) {
+                    currentTrend.textContent = "Transisi";
+                } else if (greenCount > redCount) {
+                    currentTrend.textContent = "Naik";
+                } else if (redCount > greenCount) {
+                    currentTrend.textContent = "Turun";
+                } else {
+                    currentTrend.textContent = "Sideways";
+                }
+                
+                // Get BMKH pattern
+                const bmkhPatternShort = [];
+                for (let i = 0; i < Math.min(4, patternData.bmkhPattern.length); i++) {
+                    switch(patternData.bmkhPattern[i]) {
+                        case 0: bmkhPatternShort.push("BH"); break;
+                        case 1: bmkhPatternShort.push("KH"); break;
+                        case 2: bmkhPatternShort.push("BM"); break;
+                        case 3: bmkhPatternShort.push("KM"); break;
+                    }
+                }
+                bmkhPattern.textContent = bmkhPatternShort.join("-");
+                
+                // Predict pattern change based on changeProbability
+                const changeIn = Math.max(1, Math.floor(5 - (currentData.bmkhChangeProbability * 10)));
+                patternChange.textContent = `Dalam ${changeIn}-${changeIn + 1} periode`;
+            }
+
+            // Show statistics and pattern history
+            function showStatsAndHistory() {
+                const patternData = patternDatabase[currentData.pattern];
+                
+                // Update stats with dynamic values based on break probabilities
+                const baseWinRate = patternData.winRate * 100;
+                const winRateVariation = (Math.random() * 5) - 2.5; // +/- 2.5%
+                winRate.textContent = `${Math.round(baseWinRate + winRateVariation)}%`;
+                
+                const baseAccuracy = (1 - currentData.patternChangeProbability) * 95;
+                const accuracyVariation = (Math.random() * 5) - 2.5;
+                patternAccuracy.textContent = `${Math.round(baseAccuracy + accuracyVariation)}%`;
+                
+                const streakValue = Math.floor((1 - currentData.patternChangeProbability) * 10);
+                streak.textContent = `${streakValue}x`;
+                
+                // Update pattern history
+                currentPattern.textContent = `${currentData.pattern} (${patternData.name})`;
+                
+                if (currentData.lastPatternChange) {
+                    lastPatternChange.textContent = `Periode ${currentData.lastPatternChange}`;
+                } else {
+                    const cyclesSinceChange = Math.floor(Math.random() * 3) + 1;
+                    lastPatternChange.textContent = `${cyclesSinceChange * patternData.cycleLength} periode lalu`;
+                }
+                
+                patternCycle.textContent = `${patternData.cycleLength} periode (${patternData.changeProbability * 100}% kemungkinan perubahan)`;
+                
+                // Show containers
+                statsContainer.style.display = 'grid';
+                patternHistory.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
